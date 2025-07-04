@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Focused Iframe with Popup</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background: #0f2027;
+      font-family: 'Segoe UI', sans-serif;
+      overflow: hidden;
+    }
+
+    #frameContainer {
+      width: 100%;
+      height: calc(100vh - 60px);
+      overflow: hidden;
+      position: relative;
+      background: #000;
+    }
+
+    #contentFrame {
+      width: 200%;
+      height: 200vh;
+      transform: scale(0.5);
+      transform-origin: 0 0;
+      position: absolute;
+      top: -200px; /* Adjust this to focus exactly on the video */
+      left: -100px;
+      border: none;
+    }
+
+    .button-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 10px;
+      background: rgba(0,0,0,0.8);
+      backdrop-filter: blur(8px);
+      gap: 12px;
+    }
+
+    .join-btn {
+      background: linear-gradient(to right, #00c6ff, #0072ff);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      font-size: 16px;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+
+    .join-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
+    }
+
+    .range-slider {
+      width: 160px;
+    }
+
+    .range-slider input {
+      width: 100%;
+    }
+
+    .popup-overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .popup {
+      background: #fff;
+      padding: 25px;
+      border-radius: 15px;
+      text-align: center;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+      animation: popIn 0.4s ease;
+      width: 90%;
+      max-width: 400px;
+    }
+
+    .popup h2 {
+      margin-bottom: 12px;
+      color: #222;
+    }
+
+    .popup p {
+      font-size: 15px;
+      color: #444;
+    }
+
+    .popup button {
+      margin: 10px;
+      padding: 10px 20px;
+      font-size: 15px;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+    }
+
+    .popup .cancel {
+      background-color: #ddd;
+    }
+
+    .popup .join {
+      background: #007bff;
+      color: white;
+    }
+
+    @keyframes fadeIn {
+      from {opacity: 0;}
+      to {opacity: 1;}
+    }
+
+    @keyframes popIn {
+      from {transform: scale(0.8);}
+      to {transform: scale(1);}
+    }
+
+    @media (max-width: 600px) {
+      .range-slider {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Iframe Container -->
+  <div id="frameContainer">
+    <iframe id="contentFrame"
+      sandbox="allow-forms allow-pointer-lock allow-same-origin allow-scripts allow-top-navigation"
+      allow="encrypted-media"
+      allowfullscreen="true"
+      scrolling="no"
+      src="https://tvlive.wapka.fun/p11?id=as">
+    </iframe>
+  </div>
+
+  <!-- Bottom Buttons -->
+  <div class="button-container">
+    <button class="join-btn" onclick="openPopup()">Join Telegram</button>
+    <div class="range-slider">
+      <input type="range" min="50" max="100" value="100" onchange="resizeIframe(this.value)">
+    </div>
+  </div>
+
+  <!-- Popup -->
+  <div id="popupOverlay" class="popup-overlay">
+    <div class="popup">
+      <h2>Join our Telegram!</h2>
+      <p>Don't miss live match alerts and latest updates 🏏</p>
+      <button class="cancel" onclick="closePopup()">Cancel</button>
+      <button class="join" onclick="joinTelegram()">Join Now</button>
+    </div>
+  </div>
+
+  <!-- Script -->
+  <script>
+    function openPopup() {
+      document.getElementById("popupOverlay").style.display = "flex";
+    }
+
+    function closePopup() {
+      document.getElementById("popupOverlay").style.display = "none";
+    }
+
+    function joinTelegram() {
+      window.open("https://t.me/yourgroup", "_blank");
+      closePopup();
+    }
+
+    function resizeIframe(percent) {
+      const newHeight = `calc(${percent}vh - 60px)`;
+      document.getElementById("frameContainer").style.height = newHeight;
+    }
+  </script>
+
+</body>
+</html>
